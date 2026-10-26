@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Edge Node Lab</title>
+<style>
+:root{--bg:#07080d;--card:#10121a;--line:#222636;--tx:#f2f4fa;--mut:#8b91a7;--ac:#6ea8ff;--ok:#5ee0a0;--warn:#ffb86b}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--bg);color:var(--tx);font-family:Inter,system-ui,sans-serif;line-height:1.6}
+nav{position:sticky;top:0;background:#07080dd9;backdrop-filter:blur(8px);border-bottom:1px solid var(--line);padding:12px 5vw;display:flex;gap:18px;align-items:center;z-index:5;overflow-x:auto;white-space:nowrap}
+nav b{margin-right:auto}nav a{color:var(--mut);text-decoration:none;font-size:14px}nav a:hover{color:var(--tx)}
+section{padding:70px 5vw;max-width:1000px;margin:auto}
+.eyebrow{color:var(--ac);font-size:12px;letter-spacing:.2em;text-transform:uppercase}
+h1{font-size:clamp(36px,7vw,70px);line-height:1.05;margin:12px 0;letter-spacing:-.03em}h1 span{color:var(--ac)}
+h2{font-size:30px;letter-spacing:-.02em;margin:8px 0 14px}p{color:var(--mut);max-width:700px}
+.btn{background:#fff;color:#000;border:0;padding:12px 20px;border-radius:10px;font-weight:600;cursor:pointer;font-size:15px}
+.btn.g{background:var(--card);color:var(--tx);border:1px solid var(--line)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin-top:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px}
+.card h4{margin:0 0 6px}.card p{margin:0;font-size:14px}
+.flow{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:20px}
+.flow div{background:var(--card);border:1px solid var(--line);padding:11px 15px;border-radius:10px;font-size:14px}.flow i{color:var(--ac);font-style:normal}
+pre{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;overflow:auto;font-size:13px;color:#cfd6ee;max-height:420px}
+table{width:100%;border-collapse:collapse;margin-top:14px;font-size:14px}th,td{text-align:left;padding:10px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--mut);font-weight:500}
+.scroll{overflow-x:auto}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+select{background:var(--card);color:var(--tx);border:1px solid var(--line);padding:11px;border-radius:10px;font-size:15px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-top:16px}
+.stat b{display:block;font-size:24px;color:var(--ac)}.stat span{font-size:12px;color:var(--mut)}
+canvas{width:100%;background:var(--card);border:1px solid var(--line);border-radius:14px;margin-top:14px}
+.badge{display:inline-block;font-size:12px;padding:3px 10px;border-radius:99px;border:1px solid var(--line);color:var(--mut);margin-left:8px}
+ul.f{padding-left:18px;color:var(--mut);margin:8px 0}ul.f li{margin:6px 0}ul.f b{color:var(--tx)}
+.bar{height:26px;border-radius:7px;margin:6px 0 2px;min-width:3px;transition:width .4s}
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px}@media(max-width:640px){.cmp{grid-template-columns:1fr}}
+.lbl{font-size:13px;color:var(--mut)}input[type=range]{width:220px;accent-color:#6ea8ff}
+footer{text-align:center;color:var(--mut);padding:40px;font-size:13px}
+</style></head><body>
+<nav><b>Edge Node Lab</b><a href="#overview">Overview</a><a href="#program">Program</a><a href="#experiment">Experiment</a><a href="#results">Results</a><a href="#analysis">Analysis</a><a href="#insights">Insights</a><a href="#compare">Cloud vs Edge</a></nav>
+
+<section id="overview">
+<div class="eyebrow">Introduction to Electrical Engineering</div>
+<h1>Process data where<br>it is <span>born.</span></h1>
+<p>An edge node is a computing device placed close to a data source. It filters data locally and sends only what matters to the cloud, which cuts traffic and delay. This site runs a real edge-node experiment and shows what it measured.</p>
+<p style="margin-top:20px"><button class="btn" onclick="location.hash='experiment'">Start an experiment ↗</button></p>
+<div class="flow"><div>🌡️ Sensors</div><i>→</i><div>💻 Edge node (filter &gt; 35°C)</div><i>→</i><div>🔔 Alerts only</div><i>→</i><div>☁️ Cloud (optional)</div></div>
+<div class="grid">
+<div class="card"><h4>CPU</h4><p>Runs the filtering program.</p></div>
+<div class="card"><h4>RAM</h4><p>Holds readings during processing.</p></div>
+<div class="card"><h4>Storage</h4><p>Keeps logs and selected results.</p></div>
+<div class="card"><h4>Network interface</h4><p>Sends selected alerts onward.</p></div></div></section>
+
+<section id="program">
+<div class="eyebrow">Our approach</div><h2>The Python program</h2>
+<p>Readings are generated, compared with 35°C, and timed. Payload size is found by writing both versions as JSON: everything, and alerts only.</p>
+<pre id="src">Loading…</pre></section>
+
+<section id="experiment">
+<div class="eyebrow">Live experiment</div><h2>Trust the method. Then trust the result.<span class="badge" id="eng">engine: detecting…</span></h2>
+<p>Pick a dataset size and run it, or run all three sizes from the report.</p>
+<div class="row"><select id="n"><option>10000</option><option>100000</option><option selected>500000</option><option>1000000</option></select>
+<button class="btn" onclick="run(+n.value)">Run experiment</button>
+<button class="btn g" onclick="runAll()">Run all sizes</button></div>
+<div class="stats" id="stats"></div></section>
+
+<section id="results">
+<div class="eyebrow">Results</div><h2>What was measured</h2>
+<div class="scroll"><table><thead><tr><th>Readings</th><th>Time (ms)</th><th>Alerts</th><th>Filtered out</th><th>All data</th><th>Alerts only</th><th>Data saved</th></tr></thead><tbody id="rows"><tr><td colspan="7" style="color:var(--mut)">Run an experiment to fill this table.</td></tr></tbody></table></div>
+<canvas id="c" height="260"></canvas></section>
+
+<section id="analysis">
+<div class="eyebrow">Analysis</div><h2>What the numbers say</h2>
+<ul class="f" id="ana"><li>Run at least one experiment to see the analysis. Run two or more sizes to see how time scales.</li></ul></section>
+
+<section id="insights">
+<div class="eyebrow">Insights</div><h2>Key takeaways</h2>
+<div class="grid">
+<div class="card"><h4>Most data is not needed</h4><p id="i1">Run an experiment to see how much data the edge node removes.</p></div>
+<div class="card"><h4>Filtering is cheap</h4><p id="i2">Run an experiment to see the processing time.</p></div>
+<div class="card"><h4>The threshold decides the saving</h4><p>Readings are spread evenly from 20 to 45°C, so 10 of every 25 degrees exceed 35°C, which gives an expected alert rate of 40%. Raise the threshold and savings grow; lower it and they shrink.</p></div>
+<div class="card"><h4>Not proven here</h4><p>Data is simulated and nothing is sent over a real network, so latency, energy and true bandwidth savings still need a physical test.</p></div></div></section>
+
+<section id="compare">
+<div class="eyebrow">Cloud vs edge</div><h2>Same data, two designs</h2>
+<p>Using your latest run, compare sending every reading to the cloud against filtering at the edge first. Transfer time is an estimate: measured data size ÷ the link speed you choose.</p>
+<div class="row" style="margin-top:12px"><span class="lbl">Link speed</span><input type="range" id="bw" min="1" max="100" value="5" oninput="cmp()"><b id="bwv">5 Mbps</b></div>
+<div class="cmp" id="cmp"><div class="card"><p>Run an experiment first.</p></div></div>
+<div class="scroll"><table><thead><tr><th></th><th>Cloud only</th><th>Edge node + cloud</th></tr></thead><tbody>
+<tr><td>Where data is processed</td><td>Remote server</td><td>Next to the sensor</td></tr>
+<tr><td>Data sent</td><td>Every reading</td><td>Only selected alerts</td></tr>
+<tr><td>Reaction time</td><td>Waits for a round trip</td><td>Decides locally</td></tr>
+<tr><td>If internet drops</td><td>Monitoring stops</td><td>Keeps filtering locally</td></tr>
+<tr><td>Bandwidth use</td><td>High</td><td>Lower</td></tr>
+<tr><td>Raw data privacy</td><td>Leaves the site</td><td>Can stay on the site</td></tr>
+<tr><td>Heavy analysis, long-term storage</td><td>Strong</td><td>Limited, so the cloud still helps</td></tr></tbody></table></div></section>
+<footer>Edge Node · Introduction to Electrical Engineering · Amrita Vishwa Vidyapeetham</footer>
+
+<script>
+const TH=35,res={};let last=null;const $=id=>document.getElementById(id);
+fetch('edge_node.py').then(r=>r.text()).then(t=>$('src').textContent=t).catch(()=>$('src').textContent='edge_node.py not found next to index.html');
+function mb(a){return function(){a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
+function runBrowser(n){
+  const rnd=mb(42),d=new Array(n);let mx=0;
+  for(let i=0;i<n;i++){const t=Math.round((20+rnd()*25)*100)/100;d[i]={sensor:i%8,temp:t};if(t>mx)mx=t}
+  const t0=performance.now(),a=d.filter(x=>x.temp>TH),time_s=(performance.now()-t0)/1000;
+  const raw=JSON.stringify(d).length,edge=JSON.stringify(a).length;
+  return{n,time_s,alerts:a.length,filtered_pct:100*(n-a.length)/n,raw_bytes:raw,edge_bytes:edge,saved_pct:100*(raw-edge)/raw,max_temp:mx};
+}
+async function run(n){
+  let r;$('eng').textContent='running…';
+  try{const x=await fetch('/api/run?n='+n);if(!x.ok)throw 0;r=await x.json();$('eng').textContent='engine: Python on this computer'}
+  catch(e){await new Promise(s=>setTimeout(s,30));r=runBrowser(n);$('eng').textContent='engine: JavaScript in your browser'}
+  res[n]=r;last=r;show(r);
+}
+async function runAll(){for(const n of [10000,100000,500000])await run(n)}
+const kb=b=>b>1e6?(b/1e6).toFixed(2)+' MB':(b/1e3).toFixed(1)+' KB';
+function show(r){
+  $('stats').innerHTML=[['Readings',r.n.toLocaleString()],['Time',(r.time_s*1000).toFixed(2)+' ms'],['Alerts',r.alerts.toLocaleString()],['Filtered out',r.filtered_pct.toFixed(2)+'%'],['Data saved',r.saved_pct.toFixed(1)+'%'],['Max temp',r.max_temp+'°C']].map(([k,v])=>`<div class="card stat"><b>${v}</b><span>${k}</span></div>`).join('');
+  const L=Object.values(res).sort((a,b)=>a.n-b.n);
+  $('rows').innerHTML=L.map(x=>`<tr><td>${x.n.toLocaleString()}</td><td>${(x.time_s*1000).toFixed(2)}</td><td>${x.alerts.toLocaleString()}</td><td>${x.filtered_pct.toFixed(2)}%</td><td>${kb(x.raw_bytes)}</td><td>${kb(x.edge_bytes)}</td><td>${x.saved_pct.toFixed(1)}%</td></tr>`).join('');
+  draw(L);analyse(L,r);cmp();
+}
+function analyse(L,r){
+  const avgA=L.reduce((s,x)=>s+100*x.alerts/x.n,0)/L.length,avgS=L.reduce((s,x)=>s+x.saved_pct,0)/L.length;
+  let h=`<li><b>Alert rate:</b> ${avgA.toFixed(1)}% of readings were above ${TH}°C, close to the 40% expected from a 20–45°C spread.</li>
+  <li><b>Data reduction:</b> on average ${avgS.toFixed(1)}% less data would be sent. Data saved tracks the filtered share because every reading is about the same size.</li>`;
+  if(L.length>1){const a=L[0],b=L[L.length-1];
+    h+=`<li><b>Scaling:</b> going from ${a.n.toLocaleString()} to ${b.n.toLocaleString()} readings (${(b.n/a.n).toFixed(0)}×) changed the time by ${(b.time_s/a.time_s).toFixed(1)}×. Time grows roughly in step with data because each reading is checked once.</li>`}
+  h+=`<li><b>Speed:</b> ${r.n.toLocaleString()} readings were filtered in ${(r.time_s*1000).toFixed(2)} ms, so local filtering adds almost no delay.</li>
+  <li><b>Caution:</b> times vary with the computer and its background activity; alert counts do not, because the random seed is fixed.</li>`;
+  $('ana').innerHTML=h;
+  $('i1').textContent=`At ${r.n.toLocaleString()} readings the edge node kept ${r.alerts.toLocaleString()} alerts and dropped ${(r.n-r.alerts).toLocaleString()}, cutting the data to send from ${kb(r.raw_bytes)} to ${kb(r.edge_bytes)}.`;
+  $('i2').textContent=`The filtering step took ${(r.time_s*1000).toFixed(2)} ms for ${r.n.toLocaleString()} readings. A small device can make these decisions almost instantly.`;
+}
+function cmp(){
+  const bw=+$('bw').value;$('bwv').textContent=bw+' Mbps';if(!last)return;
+  const r=last,cl=r.raw_bytes*8/(bw*1e6),ed=r.edge_bytes*8/(bw*1e6)+r.time_s,mx=Math.max(cl,ed);
+  const f=s=>s<1?(s*1000).toFixed(0)+' ms':s.toFixed(2)+' s';
+  $('cmp').innerHTML=`<div class="card"><h4>☁️ Cloud only</h4><div class="lbl">Sends ${kb(r.raw_bytes)}</div><div class="bar" style="background:#4b5170;width:${100*cl/mx}%"></div><b>${f(cl)}</b> estimated transfer</div>
+  <div class="card"><h4>💻 Edge node + cloud</h4><div class="lbl">Sends ${kb(r.edge_bytes)} after ${(r.time_s*1000).toFixed(1)} ms of filtering</div><div class="bar" style="background:var(--ok);width:${100*ed/mx}%"></div><b>${f(ed)}</b> estimated transfer + filtering<br><span class="lbl">${(100*(cl-ed)/cl).toFixed(1)}% faster to deliver, with the same alerts.</span></div>`;
+}
+function draw(L){
+  const c=$('c'),w=c.width=c.clientWidth*2,h=c.height=520,g=c.getContext('2d');g.clearRect(0,0,w,h);g.font='22px sans-serif';
+  const max=Math.max(...L.map(r=>r.raw_bytes)),bw=Math.min(90,w/(L.length*3)),s=(h-120)/max;
+  L.forEach((r,i)=>{const x=60+i*(w-120)/L.length;
+    g.fillStyle='#4b5170';g.fillRect(x,h-60-r.raw_bytes*s,bw,r.raw_bytes*s);
+    g.fillStyle='#6ea8ff';g.fillRect(x+bw+6,h-60-r.edge_bytes*s,bw,r.edge_bytes*s);
+    g.fillStyle='#8b91a7';g.fillText(r.n.toLocaleString(),x,h-25)});
+  g.fillStyle='#4b5170';g.fillRect(60,12,18,18);g.fillStyle='#8b91a7';g.fillText('Send everything (cloud only)',86,28);
+  g.fillStyle='#6ea8ff';g.fillRect(420,12,18,18);g.fillStyle='#8b91a7';g.fillText('Edge: alerts only',446,28);
+}
+</script></body></html>
